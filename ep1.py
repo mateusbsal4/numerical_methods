@@ -4,7 +4,8 @@ import sys
 import time
 
 def gerador_sistema_teste(n):
-    i = np.multiply(np.ones((1,n)), np.resize(np.arange(1,n+1),(1,n)))
+    #criação de um vetor crescente [1,2,3,..., n]
+    i = np.resize(np.arange(1,n+1),(1,n))
     
     a = (2*i -1)/(4*i)
     a[0][n-1] = (2*n - 1)/(2*n)
@@ -57,18 +58,38 @@ def resolve_sistema_ciclico(a,b,c,d):
     d_til = d.T[0:len(d[0])-1]
 
     #Composicao da submatriz T
-    a[0][0] = 0
-    a = np.resize(a[0][0:len(a[0])-1], (1,len(a[0])-1))
-    b = np.resize(b[0][0:len(b[0])-1], (1,len(b[0])-1))
-    c = np.resize(c[0][0:len(c[0])-1], (1,len(c[0])-1))
+    a_T = np.resize(a[0][0:len(a[0])-1], (1,len(a[0])-1))
+    a_T[0][0] = 0
+    b_T = np.resize(b[0][0:len(b[0])-1], (1,len(b[0])-1))
+    c_T = np.resize(c[0][0:len(c[0])-1], (1,len(c[0])-1))
 
     #Resolucao de T*y_til = d_til
-    u, l = LU_decomp_tridiag(a,b,c)
-    y_til = resolve_sistema_nao_ciclico(u,l,c,d_til.T) 
-    
+    u, l = LU_decomp_tridiag(a_T,b_T,c_T)
+    y_til = resolve_sistema_nao_ciclico(u,l,c_T,d_til.T) 
+
     #Resolucao de T*z_til = v
-    z_til = resolve_sistema_nao_ciclico(u,l,c,v.T)
-    print(z_til)
+    z_til = resolve_sistema_nao_ciclico(u,l,c_T,v.T)
+    
+    #Determinacao de xn
+    xn = d[0][len(d[0])-1] - (c[0][len(c[0])-1]*y_til[0][0]) - (a[0][len(a[0])-1]*y_til[0][len(y_til[0])-2])
+    xn = xn/(b[0][len(b[0])-1] - c[0][len(c[0])-1]*z_til[0][0] - a[0][len(a[0])-1]*z_til[0][len(z_til[0])-2])
+    
+    #Determinacao de x_til
+    x_til = y_til - xn*z_til
+
+    return np.resize(np.insert(x_til,len(x_til[0]),xn),(1,len(x_til[0])+1)).T
+
+def gera_matriz_tridiagonal(n):
+    a = np.zeros((n,n))
+    for i in range(n):
+        for j in range(n):
+            if i=j+1:
+                a[i] = (2*i-1)/4*i
+
+
+
+            
+
 
 if __name__ == '__main__':
     #a = [0,-1,-1,-1]
@@ -76,18 +97,30 @@ if __name__ == '__main__':
     #c = [-1, -1, -1, -1]
     #d = [1,0,0,1]
 
-    a,b,c,d = gerador_sistema_teste(4)
+    a,b,c,d = gerador_sistema_teste(20)
     print("a:" + str(a))
     print("b:" + str(b))
     print("c:" + str(c))
     print("d:" + str(d))
-    print("ahoy")
     
     start_time = time.time()
     u,l  = LU_decomp_tridiag(a,b,c)
-    print(u)
-    print(l)
-    solucao = resolve_sistema_nao_ciclico(u,l,c,d)
-    print(solucao)
-    print(time.time() - start_time)
-    resolve_sistema_ciclico(a,b,c,d)
+    print("Resultado: ")
+    print(resolve_sistema_ciclico(a,b,c,d))
+    print("Tempo decorrido: ", time.time() - start_time)
+
+
+
+    #### TO DO ####
+    # Debug
+        # Função de montar a matrix em duas dimensões mesmo
+        # Print de teste para avaliar a precisão do resultado
+    # Documentação
+        # Comentar cada coisinha do codigo
+        # README
+        # Relatorio
+    # Apresentacao
+        # O que vamos deixar printado no terminal?
+            # Resultado como matriz coluna?
+    # Modularidade
+        # Colocar em OOP?
