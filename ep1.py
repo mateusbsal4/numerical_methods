@@ -83,11 +83,16 @@ def gera_matriz_tridiagonal(n):
     a = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
-            if i=j+1:
-                a[i] = (2*i-1)/4*i
-
-
-
+            if i==j+1 and i !=n-1:
+                a[i][j] = (2*(i+1)-1)/(4*(i+1))
+            if i == j:
+                a[i][j] = 2
+            if j == i+1:
+                a[i][j] = 1-(2*(i+1)-1)/(4*(i+1))
+    a[n-1][n-2] = (2*n-1)/(2*n)
+    a[0][n-1] = 1/4
+    a[n-1][0] = 1-(2*n-1)/(2*n)
+    return a
             
 
 
@@ -108,6 +113,9 @@ if __name__ == '__main__':
     print("Resultado: ")
     print(resolve_sistema_ciclico(a,b,c,d))
     print("Tempo decorrido: ", time.time() - start_time)
+    A = gera_matriz_tridiagonal(20)
+    r = np.dot(A,x) - d.T
+    print(r)
 
 
 
