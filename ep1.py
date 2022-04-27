@@ -56,12 +56,14 @@ def resolve_sistema_ciclico(a,b,c,d):
     w = w.T
 
     d_til = d.T[0:len(d[0])-1]
+    print(d_til)
 
     #Composicao da submatriz T
     a_T = np.resize(a[0][0:len(a[0])-1], (1,len(a[0])-1))
     a_T[0][0] = 0
     b_T = np.resize(b[0][0:len(b[0])-1], (1,len(b[0])-1))
     c_T = np.resize(c[0][0:len(c[0])-1], (1,len(c[0])-1))
+    c_T[0][len(c_T[0])-1] = 0
 
     #Resolucao de T*y_til = d_til
     u, l = LU_decomp_tridiag(a_T,b_T,c_T)
@@ -73,10 +75,8 @@ def resolve_sistema_ciclico(a,b,c,d):
     #Determinacao de xn
     xn = d[0][len(d[0])-1] - (c[0][len(c[0])-1]*y_til[0][0]) - (a[0][len(a[0])-1]*y_til[0][len(y_til[0])-2])
     xn = xn/(b[0][len(b[0])-1] - c[0][len(c[0])-1]*z_til[0][0] - a[0][len(a[0])-1]*z_til[0][len(z_til[0])-2])
-    
     #Determinacao de x_til
     x_til = y_til - xn*z_til
-
     return np.resize(np.insert(x_til,len(x_til[0]),xn),(1,len(x_til[0])+1)).T
 
 def gera_matriz_tridiagonal(n):
@@ -93,8 +93,6 @@ def gera_matriz_tridiagonal(n):
     a[0][n-1] = 1/4
     a[n-1][0] = 1-(2*n-1)/(2*n)
     return a
-            
-
 
 if __name__ == '__main__':
     #a = [0,-1,-1,-1]
@@ -111,24 +109,17 @@ if __name__ == '__main__':
     start_time = time.time()
     u,l  = LU_decomp_tridiag(a,b,c)
     print("Resultado: ")
-    print(resolve_sistema_ciclico(a,b,c,d))
+    x = resolve_sistema_ciclico(a,b,c,d)
+    print(x)
     print("Tempo decorrido: ", time.time() - start_time)
     A = gera_matriz_tridiagonal(20)
     r = np.dot(A,x) - d.T
     print(r)
 
 
-
     #### TO DO ####
-    # Debug
-        # Função de montar a matrix em duas dimensões mesmo
-        # Print de teste para avaliar a precisão do resultado
     # Documentação
         # Comentar cada coisinha do codigo
         # README
         # Relatorio
-    # Apresentacao
-        # O que vamos deixar printado no terminal?
-            # Resultado como matriz coluna?
-    # Modularidade
-        # Colocar em OOP?
+    # Ultimo resultado está errado? -> resíduo anormalmente grande
