@@ -74,13 +74,14 @@ def resolve_sistema_ciclico(a,b,c,d):
     z_til = resolve_sistema_nao_ciclico(u,l,c_T,v.T)
     
     #Gera a  matriz T inteira para teste e calcula o residuo dos sistemas nao ciclicos
-    T = gera_matriz_tridiagonal_n_cicl(len(a[0]-1))
-    print(d_til-np.dot(T,((y_til).T)))
-    print(len(y_til))
-    print(v-np.dot(T,((z_til).T))
+    T = gera_matriz_tridiagonal_n_cicl(len(a[0])-1)
+    print("residuo de Ty = d: ")
+    print(d_til-np.dot(T,y_til.T))
+    print("residuo de Tz = v")
+    print(v-np.dot(T,((z_til).T)))
     
     #Determinacao de xn
-    xn = d[0][len(d[0])-1] - (c[0][len(c[0])-1]*y_til[0][0]) - (a[0][len(a[0])-1]*y_til[0][len(y_til[0])-2])
+    xn = (d[0][len(d[0])-1] - (c[0][len(c[0])-1]*y_til[0][0]) - (a[0][len(a[0])-1]*y_til[0][len(y_til[0])-2]))
     xn = xn/(b[0][len(b[0])-1] - c[0][len(c[0])-1]*z_til[0][0] - a[0][len(a[0])-1]*z_til[0][len(z_til[0])-2])
     #Determinacao de x_til
     x_til = y_til - xn*z_til
@@ -127,12 +128,13 @@ if __name__ == '__main__':
     
     start_time = time.time()
     u,l  = LU_decomp_tridiag(a,b,c)
-    print("Resultado: ")
     x = resolve_sistema_ciclico(a,b,c,d)
+    print("Resultado: ")
     print(x)
     print("Tempo decorrido: ", time.time() - start_time)
     A = gera_matriz_tridiagonal(20)
     r = np.dot(A,x) - d.T
+    print("residuo final: ")
     print(r)
 
 
