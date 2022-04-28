@@ -68,9 +68,16 @@ def resolve_sistema_ciclico(a,b,c,d):
     #Resolucao de T*y_til = d_til
     u, l = LU_decomp_tridiag(a_T,b_T,c_T)
     y_til = resolve_sistema_nao_ciclico(u,l,c_T,d_til.T) 
+    
 
     #Resolucao de T*z_til = v
     z_til = resolve_sistema_nao_ciclico(u,l,c_T,v.T)
+    
+    #Gera a  matriz T inteira para teste e calcula o residuo dos sistemas nao ciclicos
+    T = gera_matriz_tridiagonal_n_cicl(len(a[0]-1))
+    print(d_til-np.dot(T,((y_til).T)))
+    print(len(y_til))
+    print(v-np.dot(T,((z_til).T))
     
     #Determinacao de xn
     xn = d[0][len(d[0])-1] - (c[0][len(c[0])-1]*y_til[0][0]) - (a[0][len(a[0])-1]*y_til[0][len(y_til[0])-2])
@@ -92,6 +99,18 @@ def gera_matriz_tridiagonal(n):
     a[n-1][n-2] = (2*n-1)/(2*n)
     a[0][n-1] = 1/4
     a[n-1][0] = 1-(2*n-1)/(2*n)
+    return a
+
+def gera_matriz_tridiagonal_n_cicl(n):
+    a = np.zeros((n,n))
+    for i in range(n):
+        for j in range(n):
+            if i==j+1:
+                a[i][j] = (2*(i+1)-1)/(4*(i+1))
+            if i == j:
+                a[i][j] = 2
+            if j == i+1:
+                a[i][j] = 1-(2*(i+1)-1)/(4*(i+1))
     return a
 
 if __name__ == '__main__':
