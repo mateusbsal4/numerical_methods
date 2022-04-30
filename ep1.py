@@ -44,7 +44,7 @@ def resolve_sistema_nao_ciclico(u,l,c,d):
         x[0][i]=(y[0][i]-c[0][i]*x[0][i+1])/u[0][i]
     return x
     
-def resolve_sistema_ciclico(a,b,c,d):
+def resolve_sistema_ciclico(a,b,c,d,n):
     v = np.zeros((1,len(a[0])-1)) #is the size correct?
     v[0][0] = a[0][0]
     v[0][len(v[0])-1] = c[0][len(c[0])-2]
@@ -81,8 +81,8 @@ def resolve_sistema_ciclico(a,b,c,d):
     print(v-np.dot(T,((z_til).T)))
     
     #Determinacao de xn
-    xn = (d[0][len(d[0])-1] - (c[0][len(c[0])-1]*y_til[0][0]) - (a[0][len(a[0])-1]*y_til[0][len(y_til[0])-2]))
-    xn = xn/(b[0][len(b[0])-1] - c[0][len(c[0])-1]*z_til[0][0] - a[0][len(a[0])-1]*z_til[0][len(z_til[0])-2])
+    xn = d[0][n-1] - (c[0][n-1])*(y_til[0][0]) - (a[0][n-1])*(y_til[0][n-2])
+    xn = xn/(b[0][n-1] - (c[0][n-1])*(z_til[0][0]) - (a[0][n-1])*(z_til[0][n-2]))
     #Determinacao de x_til
     x_til = y_til - xn*z_til
     return np.resize(np.insert(x_til,len(x_til[0]),xn),(1,len(x_til[0])+1)).T
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     #b = [2, 2, 2, 2]
     #c = [-1, -1, -1, -1]
     #d = [1,0,0,1]
-
+    n = 20
     a,b,c,d = gerador_sistema_teste(20)
     print("a:" + str(a))
     print("b:" + str(b))
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     
     start_time = time.time()
     u,l  = LU_decomp_tridiag(a,b,c)
-    x = resolve_sistema_ciclico(a,b,c,d)
+    x = resolve_sistema_ciclico(a,b,c,d,n)
     print("Resultado: ")
     print(x)
     print("Tempo decorrido: ", time.time() - start_time)
