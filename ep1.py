@@ -5,7 +5,7 @@ import time
 
 def gerador_sistema_teste(n): #Essa funcao gera o sistema teste proposto no enunciado do exercicio programa, retornando a,b,c e d de uma matrix n por n, sendo n a entrada.
     
-    #criação de um vetor crescente [1,2,3,..., n]
+    #criaçao de um vetor crescente [1,2,3,..., n]
     i = np.resize(np.arange(1,n+1),(1,n))
     
     a = (2*i -1)/(4*i)
@@ -31,7 +31,7 @@ def LU_decomp_tridiag(a,b,c): #Essa funcao recebe uma matriz tridiagonal em sua 
         u[0][i] = b[0][i]-l[0][i]*c[0][i-1]
     return u, l
 
-def resolve_sistema_nao_ciclico(u,l,c,d): #Resolve Ax=d para uma matriz A tridiagonal nao ciclica decomposta em LU. as entradas são u,l,c e d. devolve o vetor x, resolucao do sistema linear
+def resolve_sistema_nao_ciclico(u,l,c,d): #Resolve para uma matriz  tridiagonal nao ciclica decomposta em LU. as entradas são u,l,c e d. devolve o vetor x, resolucao do sistema linear
     n = len(u[0])
     y = np.zeros((1,n))
     x = np.zeros((1,n))
@@ -49,7 +49,7 @@ def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal 
     v[0][len(v[0])-1] = c[0][len(c[0])-2]
     v = v.T
 
-    w = np.zeros((1,len(a[0])-1)) #is the size correct?
+    w = np.zeros((1,len(a[0])-1)) 
     w[0][0] = c[0][len(c[0])-1]
     w[0][len(w[0])-1] = a[0][len(a[0])-1]
     w = w.T
@@ -117,8 +117,10 @@ def gera_matriz_tridiagonal_n_cicl(n): #Retorna matriz tridiagonal ciclica de te
     return a
 
 if __name__ == '__main__':
+    modo = int(input("Digite o número do teste que você quer rodar, sendo: \n Teste 1: achar decomposiçao LU da matriz tridiagonal T \n Teste 2: Resolver sistemas nao ciclicos Ty_til = d_til e Tz_til=v  \n Teste 3: resolver sistema ciclico Ax = d \n"))
+    n = int(input("Digite n: "))
     #TODO pedir tamanho da matriz no terminal
-    n = 20
+   
     
     a,b,c,d = gerador_sistema_teste(20)
     print("Matriz gerada que sera resolvida: ")
@@ -126,6 +128,37 @@ if __name__ == '__main__':
     print("b:" + str(b))
     print("c:" + str(c))
     print("d:" + str(d))
+    
+    
+    a_T = np.resize(a[0][0:len(a[0])-1], (1,len(a[0])-1))
+    a_T[0][0] = 0
+    b_T = np.resize(b[0][0:len(b[0])-1], (1,len(b[0])-1))
+    c_T = np.resize(c[0][0:len(c[0])-1], (1,len(c[0])-1))
+    c_T[0][len(c_T[0])-1] = 0
+    d_til = d.T[0:len(d[0])-1]
+    v = np.zeros((1,len(a[0])-1))
+    v[0][0] = a[0][0]
+    v[0][len(v[0])-1] = c[0][len(c[0])-2]
+    v = v.T
+    
+    if modo == 1:
+        u,l = LU_decomp_tridiag(a_T,b_T,c_T)
+        print("Vetor u =", u)
+        print("vetor l =", l)
+        
+        
+    elif modo == 2:
+        u,l = LU_decomp_tridiag(a_T,b_T,c_T)
+        print("y_til =", resolve_sistema_nao_ciclico(u,l,c_T,d_til.T) )
+        print("z_til= ", resolve_sistema_nao_ciclico(u,l,c_T,v.T))
+        
+    elif modo == 3:
+        print("x =", resolve_sistema_ciclico(a,b,c,d,n))
+        
+
+
+     
+    
     
     start_time = time.time()
     x = resolve_sistema_ciclico(a,b,c,d,n)
