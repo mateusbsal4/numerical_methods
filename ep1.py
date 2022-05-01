@@ -3,7 +3,8 @@ import math
 import sys
 import time
 
-def gerador_sistema_teste(n):
+def gerador_sistema_teste(n): #Essa funcao gera o sistema teste proposto no enunciado do exercicio programa, retornando a,b,c e d de uma matrix n por n, sendo n a entrada.
+    
     #criação de um vetor crescente [1,2,3,..., n]
     i = np.resize(np.arange(1,n+1),(1,n))
     
@@ -18,11 +19,11 @@ def gerador_sistema_teste(n):
 
     return a,b,c,d
 
-def LU_decomp_tridiag(a,b,c):
+def LU_decomp_tridiag(a,b,c): #Essa funcao recebe uma matriz tridiagonal em sua entrada, nas variaveis a,b e c, e retorna u e l, coeficientes das matrizes de decomposicao LU
     n = len(b[0])
     u = np.zeros((1,n))
     l = np.zeros((1,n))
-    # decompoe A em LU
+    # Seguimos o algoritmo proposto no enunciado do EP1
     u[0][0] = b[0][0]
     l[0][0] = 0
     for i in range(1,n):
@@ -30,22 +31,20 @@ def LU_decomp_tridiag(a,b,c):
         u[0][i] = b[0][i]-l[0][i]*c[0][i-1]
     return u, l
 
-def resolve_sistema_nao_ciclico(u,l,c,d):
-    # resolve Ly=d
+def resolve_sistema_nao_ciclico(u,l,c,d): #Resolve Ax=d para uma matriz A tridiagonal nao ciclica decomposta em LU. as entradas são u,l,c e d. devolve o vetor x, resolucao do sistema linear
     n = len(u[0])
     y = np.zeros((1,n))
     x = np.zeros((1,n))
     y[0][0]=d[0][0]
     for i in range(1,n):
         y[0][i] = d[0][i]-l[0][i]*y[0][i-1]
-    # resolve Ux = y
     x[0][n-1] = y[0][n-1]/u[0][n-1]
     for i in range(n-2,-1,-1):
         x[0][i]=(y[0][i]-c[0][i]*x[0][i+1])/u[0][i]
     return x
     
-def resolve_sistema_ciclico(a,b,c,d,n):
-    v = np.zeros((1,len(a[0])-1)) #is the size correct?
+def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal ciclica. as entradas sao a,b,c,d e n (tamanho da matriz). devolve o vetor x, resolucao do sistema linear
+    v = np.zeros((1,len(a[0])-1))
     v[0][0] = a[0][0]
     v[0][len(v[0])-1] = c[0][len(c[0])-2]
     v = v.T
@@ -83,11 +82,14 @@ def resolve_sistema_ciclico(a,b,c,d,n):
     #Determinacao de xn
     xn = d[0][n-1] - (c[0][n-1])*(y_til[0][0]) - (a[0][n-1])*(y_til[0][n-2])
     xn = xn/(b[0][n-1] - (c[0][n-1])*(z_til[0][0]) - (a[0][n-1])*(z_til[0][n-2]))
+    
     #Determinacao de x_til
     x_til = y_til - xn*z_til
+    
+    #Retorna x_til com xn adicionado no final do vetor
     return np.resize(np.insert(x_til,len(x_til[0]),xn),(1,len(x_til[0])+1)).T
 
-def gera_matriz_tridiagonal(n):
+def gera_matriz_tridiagonal(n): #Retorna matriz tridiagonal nao ciclica de teste "a" de tamanho n por n. Essa matriz servira para as funcoes de debug do codigo
     a = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
@@ -102,7 +104,7 @@ def gera_matriz_tridiagonal(n):
     a[n-1][0] = 1-(2*n-1)/(2*n)
     return a
 
-def gera_matriz_tridiagonal_n_cicl(n):
+def gera_matriz_tridiagonal_n_cicl(n): #Retorna matriz tridiagonal ciclica de teste "a" de tamanho n por n. Essa matriz servira para as funcoes de debug do codigo
     a = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
@@ -115,38 +117,22 @@ def gera_matriz_tridiagonal_n_cicl(n):
     return a
 
 if __name__ == '__main__':
-    #a = [0,-1,-1,-1]
-    #b = [2, 2, 2, 2]
-    #c = [-1, -1, -1, -1]
-    #d = [1,0,0,1]
+    #TODO pedir tamanho da matriz no terminal
     n = 20
+    
     a,b,c,d = gerador_sistema_teste(20)
+    print("Matriz gerada que sera resolvida: ")
     print("a:" + str(a))
     print("b:" + str(b))
     print("c:" + str(c))
     print("d:" + str(d))
     
     start_time = time.time()
-    u,l  = LU_decomp_tridiag(a,b,c)
     x = resolve_sistema_ciclico(a,b,c,d,n)
     print("Resultado: ")
     print(x)
-    print("Tempo decorrido: ", time.time() - start_time)
+    print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
     A = gera_matriz_tridiagonal(20)
     r = np.dot(A,x) - d.T
     print("residuo final: ")
     print(r)
-    x_barra  = np.array([[0.33189941,  0.33337847,  0.33089203,  0.32456897,  0.31054214,  0.28498039, 0.24375753,  0.1834913, 0.10274418,  0.00360625, -0.10669712, -0.21472831, -0.30113601, -0.34331333, -0.32095628, -0.22457847, -0.06361961,  0.12491935,0.29035857,  0.34417587]])
-    e = x - (x_barra).T
-    print((x_barra).T)
-    print(e)
-    print(r+A@e)
-    
-
-
-    #### TO DO ####
-    # Documentação
-        # Comentar cada coisinha do codigo
-        # README
-        # Relatorio
-    # Ultimo resultado está errado? -> resíduo anormalmente grande
