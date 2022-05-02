@@ -49,10 +49,6 @@ def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal 
     v[0][len(v[0])-1] = c[0][len(c[0])-2]
     v = v.T
 
-    w = np.zeros((1,len(a[0])-1)) 
-    w[0][0] = c[0][len(c[0])-1]
-    w[0][len(w[0])-1] = a[0][len(a[0])-1]
-    w = w.T
 
     d_til = d.T[0:len(d[0])-1]
 
@@ -71,12 +67,14 @@ def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal 
     #Resolucao de T*z_til = v
     z_til = resolve_sistema_nao_ciclico(u,l,c_T,v.T)
     
+    #print("residuo de Ty_til = d_til: ")
+    #print(d_til-np.dot(T,y_til.T))
+    #print("residuo de Tz_til = v")
+    #print(v-np.dot(T,((z_til).T)))
+    
     #Gera a  matriz T inteira para teste e calcula o residuo dos sistemas nao ciclicos
     T = gera_matriz_tridiagonal_n_cicl(len(a[0])-1)
-    #print("residuo de Ty = d: ")
-    #print(d_til-np.dot(T,y_til.T))
-    #print("residuo de Tz = v")
-    #print(v-np.dot(T,((z_til).T)))
+    
     
     #Determinacao de xn
     xn = d[0][n-1] - (c[0][n-1])*(y_til[0][0]) - (a[0][n-1])*(y_til[0][n-2])
