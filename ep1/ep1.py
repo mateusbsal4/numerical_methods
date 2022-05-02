@@ -89,7 +89,7 @@ def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal 
     #Retorna x_til com xn adicionado no final do vetor
     return np.resize(np.insert(x_til,len(x_til[0]),xn),(1,len(x_til[0])+1)).T
 
-def gera_matriz_tridiagonal(n): #Retorna matriz tridiagonal nao ciclica de teste "a" de tamanho n por n. Essa matriz servira para as funcoes de debug do codigo
+def gera_matriz_tridiagonal(n): #Retorna matriz tridiagonal ciclica de teste "a" de tamanho n por n. Essa matriz servira para as funcoes de debug do codigo
     a = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
@@ -104,7 +104,7 @@ def gera_matriz_tridiagonal(n): #Retorna matriz tridiagonal nao ciclica de teste
     a[n-1][0] = 1-(2*n-1)/(2*n)
     return a
 
-def gera_matriz_tridiagonal_n_cicl(n): #Retorna matriz tridiagonal ciclica de teste "a" de tamanho n por n. Essa matriz servira para as funcoes de debug do codigo
+def gera_matriz_tridiagonal_n_cicl(n): #Retorna matriz tridiagonal nao ciclica de teste "a" de tamanho n por n. Essa matriz servira para as funcoes de debug do codigo
     a = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
