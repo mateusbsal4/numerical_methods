@@ -55,7 +55,6 @@ def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal 
     w = w.T
 
     d_til = d.T[0:len(d[0])-1]
-    print(d_til)
 
     #Composicao da submatriz T
     a_T = np.resize(a[0][0:len(a[0])-1], (1,len(a[0])-1))
@@ -74,10 +73,10 @@ def resolve_sistema_ciclico(a,b,c,d,n): #Resolve Ax=d para matriz A tridiagonal 
     
     #Gera a  matriz T inteira para teste e calcula o residuo dos sistemas nao ciclicos
     T = gera_matriz_tridiagonal_n_cicl(len(a[0])-1)
-    print("residuo de Ty = d: ")
-    print(d_til-np.dot(T,y_til.T))
-    print("residuo de Tz = v")
-    print(v-np.dot(T,((z_til).T)))
+    #print("residuo de Ty = d: ")
+    #print(d_til-np.dot(T,y_til.T))
+    #print("residuo de Tz = v")
+    #print(v-np.dot(T,((z_til).T)))
     
     #Determinacao de xn
     xn = d[0][n-1] - (c[0][n-1])*(y_til[0][0]) - (a[0][n-1])*(y_til[0][n-2])
@@ -118,16 +117,15 @@ def gera_matriz_tridiagonal_n_cicl(n): #Retorna matriz tridiagonal ciclica de te
 
 if __name__ == '__main__':
     modo = int(input("Digite o número do teste que você quer rodar, sendo: \n Teste 1: achar decomposiçao LU da matriz tridiagonal T \n Teste 2: Resolver sistemas nao ciclicos Ty_til = d_til e Tz_til=v  \n Teste 3: resolver sistema ciclico Ax = d \n"))
+    if modo != 1 and modo !=2 and modo!= 3:
+        print("Entrada invalida")
+        sys.exit()
     n = int(input("Digite n: "))
-    #TODO pedir tamanho da matriz no terminal
+    assert n > 0 and type(n) == int
+    
    
     
-    a,b,c,d = gerador_sistema_teste(20)
-    print("Matriz gerada que sera resolvida: ")
-    print("a:" + str(a))
-    print("b:" + str(b))
-    print("c:" + str(c))
-    print("d:" + str(d))
+    a,b,c,d = gerador_sistema_teste(n)
     
     
     a_T = np.resize(a[0][0:len(a[0])-1], (1,len(a[0])-1))
@@ -142,30 +140,29 @@ if __name__ == '__main__':
     v = v.T
     
     if modo == 1:
+        start_time = time.time()
         u,l = LU_decomp_tridiag(a_T,b_T,c_T)
         print("Vetor u =", u)
         print("vetor l =", l)
+        print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
         
         
     elif modo == 2:
+        start_time = time.time()
         u,l = LU_decomp_tridiag(a_T,b_T,c_T)
         print("y_til =", resolve_sistema_nao_ciclico(u,l,c_T,d_til.T) )
         print("z_til= ", resolve_sistema_nao_ciclico(u,l,c_T,v.T))
+        print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
         
     elif modo == 3:
+        start_time = time.time()
         print("x =", resolve_sistema_ciclico(a,b,c,d,n))
+        print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
+   
+            
         
 
 
-     
-    
-    
-    start_time = time.time()
-    x = resolve_sistema_ciclico(a,b,c,d,n)
-    print("Resultado: ")
-    print(x)
-    print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
-    A = gera_matriz_tridiagonal(20)
-    r = np.dot(A,x) - d.T
-    print("residuo final: ")
-    print(r)
+  
+    #r = np.dot(A,x) - d.T
+    #print(r)
