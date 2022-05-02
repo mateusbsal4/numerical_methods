@@ -1,0 +1,15 @@
+# Exercicio programa 1 - MAP3121 - Metodos numéricos e aplicações 2022
+Programa feito com objetivo de resolver sistemas lineares tridiagonais ciclicos e não ciclicos.
+
+# Dependencias
+- python 3.6 ou posterior
+- numpy 1.11 ou posterior
+  
+# Instruções de uso
+Para usar o exercicio programa 1, basta rodar o arquivo ep1.py seguindo as dependencias já colocadas
+Serão apresentadas três opções para o usuário, elas permitirão que diversas funcionalidades do código sejam testadas
+A seleção do modo 1 criará uma matriz tridiagonal não-ciclica T de tamanho (n-1)x(n-1) e uma matriz coluna d_til com altura n-1, com as características indicadas pelo enunciado do exercicio programa, e mostrará a resolução do sistema linear T*x = d_til
+
+A seleção do modo 2 criará uma matriz tridiagonal não-ciclica T de tamanho (n-1)x(n-1), uma matriz coluna d_til de altura n-1 e uma matriz coluna v de altura n-1, todas com as características indicadas pelo enunciado do exercicio programa, e mostrará a resoluçao dos sistemas lineares T*y_til = d_til e T*z_til = v
+
+A seleção do modo 3 criará uma matriz tridiagonal ciclica A de tamanho n por n e uma matriz coluna d com altura n, ambas com as características indicadas pelo enunciado do exercicio programa, e mostrará a resolução do sistema linear Ax = d
