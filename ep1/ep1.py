@@ -117,13 +117,15 @@ def gera_matriz_tridiagonal_n_cicl(n): #Retorna matriz tridiagonal ciclica de te
     return a
 
 if __name__ == '__main__':
-    modo = int(input("Digite o número do teste que você quer rodar, sendo: \n Teste 1: achar decomposiçao LU da matriz tridiagonal T \n Teste 2: Resolver sistemas nao ciclicos Ty_til = d_til e Tz_til=v  \n Teste 3: resolver sistema ciclico Ax = d \n"))
-    if modo != 1 and modo !=2 and modo!= 3:
+    modo = input("Digite o número do teste que você quer rodar, sendo: \n Teste 1: achar decomposiçao LU da matriz tridiagonal T \n Teste 2: Resolver sistemas nao ciclicos Ty_til = d_til e Tz_til=v  \n Teste 3: resolver sistema ciclico Ax = d \n")
+    n = input("Digite n: ")
+    try:
+        modo = int(modo)
+        n = int(n)
+        assert (n > 0 and type(n) == int) and (modo == 1 or modo == 2 or modo == 3)
+    except:
         print("Entrada invalida")
         sys.exit()
-    n = int(input("Digite n: "))
-    assert n > 0 and type(n) == int
-    
    
     
     a,b,c,d = gerador_sistema_teste(n)
