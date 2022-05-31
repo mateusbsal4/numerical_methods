@@ -40,9 +40,12 @@ def tabela_w(n, L):
 def integra(a,b,f,n,x,w):
     assert len(x) == len(w)
     if a == -1 and b == 1:
-        I = w*f(x)
-        return I.sum()
-
+        I = 0
+        for i in range(len(x)):
+            I += w[i]*f(x[i])
+        return I
+    
+    
 if __name__ == "__main__":
     #print(acha_Legendren(4))
     #print(acha_Legendren(5))
