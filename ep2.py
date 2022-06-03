@@ -52,17 +52,21 @@ def tabela_w(n, L):                                         #cria a lista comple
 
 def integra(a,b,f,n,x,w):
     assert len(x) == len(w)
-    assert type(a) == float and type(b) == float
-    I = 0
-    if a == -1 and b == 1:                             #acha integral para o caso [a,b]= [1,1]
+    if type(a) == float and type(b) == float:              #a e b são números
+        I = 0
+        if a == -1 and b == 1:                             #acha integral para o caso [a,b]= [1,1]
+            for i in range(len(x)):
+                I += w[i]*f(x[i])
+            return I
         for i in range(len(x)):
-            I += w[i]*f(x[i])
+            I += w[i]*f(((b-a)*x[i]+(b+a))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
+        I *= (b-a)/2
         return I
-    for i in range(len(x)):
-        I += w[i]*f(((b-a)*x[i]+(b+a))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
-    I *= (b-a)/2
-    return I
-    
+    elif type(a) == func or type(b) == func:                                    #adaptação para o caso em que os limites são funções
+        for i in range(len(x)):
+            I += w[i]*f(((b(x[i])-a(x[i]))*x[i]+(b(x[i])+a(x[i])))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
+        I *= (b(x[i])-a(x[i]))/2
+        return I
     
 if __name__ == "__main__":
     #dados do enunciado
