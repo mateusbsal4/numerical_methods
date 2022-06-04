@@ -8,65 +8,33 @@ import time
 
 
 
-#def acha_Legendren(n): #funcao que acha as raizes do polinomio de Legendre de ordem n+1, para n >= 2
-#    x = sym.Symbol('x')
-#    P_0 = 1
-#    P_1 = x
-#    Legendre = [P_0,P_1]
-#    for i in range(2,n+1):
-#        P_n = ((2*(i-1)+1)*x*Legendre[i-1] - (i-1)*Legendre[i-2])/(i)      
-#        P_n = sym.simplify(P_n)
-#        #print(P_n)
-#        Legendre.append(P_n)
-#        #print(Legendre)
-#    return P_n
-#
-#def raizes_Legendren(Pn): #retorna uma tupla com os valores numéricos das raízes 
-#    x = sym.Symbol('x')
-#    return sym.solve(Pn,x)
+       
+    
+    
 
-#def acha_pesos(n,f):
-#   W  = []
-#   for i in range(n):
-#       new_s = sym.Symbol("w"+str(i))
-#       Symbols.append(new_s)
-#   equations = []
-#   for i in range(n+1):
-#        equation = 0
-#       for i in range(n):
-#           equation += W[i]*f(raizes_Legendre(acha_Legendren(n))[i])
-#        equation -= inacha_Legendren(i)
-#    equations.append(equation) 
-
-def tabela_x(n, L):                                         #devolve o array completo das raizes xi, dado n e as raizes positivas
+def tabela_x(n, L):
+    a = - L                                         #devolve o array completo das raizes xi, dado n e as raizes positivas
     if n % 2 == 0:
-        a = - L
-        return np.concatenate((a, [0], L))                  #devolve o array completo das raizes xi, dado n e as raizes positivas
-    return np.concatenate((a, L))
+        return np.concatenate((a, L))                 
+    return np.concatenate((a, [0], L))
 
 def tabela_w(n, L):                                         #cria a lista completa dos pesos wi dado n e os pesos positivos, 
     if n % 2 ==0:
-        return np.concatenate((L, [2-2*(L.sum())], L))      #usa o fato de que a soma de todos os pesos é o tamanho do intervalo
-    return np.concatenate((L, L))
+        return np.concatenate((L, L))      #usa o fato de que a soma de todos os pesos é o tamanho do intervalo
+    return np.concatenate((L, [2-2*(L.sum())], L))
+#
+def integra(a, b, c, d, f, n, r, w):    #na integral dupla calcula-se primeiro para cada ponto x fixo, a integral em y que corresponde a area A(x) determinada pela interseção do plano correspondente com o sólido. Após isso                   
+    I = 0
+    for j in range(len(r)):                #laço que atualiza a integral dupla
+        x_t = 1/2*((b-a)*r[j]+a+b)      #transformação de coordenadas para o intervalo de integração em x
+        I_int = 0                       #aproximação para a integral interna, correspondente aos A(y) para x fixp
+        for i in range(0,n):
+            I_int += w[i]*f(x_t,((d(x_t)-c(x_t))*r[i]+d(x_t)+c(x_t))/2)   # atualização de I_int a cada iteração, considerando os nós em y_i (e portanto função de x_i) correspondentes e já com a transformação de coordenadas correspondente
+        I_int = I_int*w[j]*((d(x_t)-c(x_t))/2)                                 # multiplicação pelo fator de escala da integral interna
+        I += I_int
+    I *= (b-a)/2                                                        # multipl. pelo fator de escala da integral externa
+    return I    
 
-
-def integra(a,b,f,n,x,w):
-    assert len(x) == len(w)
-    if type(a) == float and type(b) == float:              #a e b são números
-        I = 0
-        if a == -1 and b == 1:                             #acha integral para o caso [a,b]= [1,1]
-            for i in range(len(x)):
-                I += w[i]*f(x[i])
-            return I
-        for i in range(len(x)):
-            I += w[i]*f(((b-a)*x[i]+(b+a))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
-        I *= (b-a)/2
-        return I
-    elif type(a) == func or type(b) == func:                                    #adaptação para o caso em que os limites são funções
-        for i in range(len(x)):
-            I += w[i]*f(((b(x[i])-a(x[i]))*x[i]+(b(x[i])+a(x[i])))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
-        I *= (b(x[i])-a(x[i]))/2
-        return I
     
 if __name__ == "__main__":
     #dados do enunciado
@@ -78,10 +46,11 @@ if __name__ == "__main__":
     w10 = np.array([0.2955242247147528701738930, 0.2692667193099963550912269, 0.2190863625159820439955349, 0.1494513491505805931457763, 0.0666713443086881375935688])
 
     start_time = time.time()
-    print(integra(-1,1, lambda x: x**2, 6, tabela_x(6,x6), tabela_w(6,w6)))           #funcoes f de entrada devem ser do tipo lambda
-    print(integra(-1,1, lambda x: (math.e)**x**2, 6, tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(-1,1, lambda x: math.sin(x), 6, tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(1,2, lambda x: 1/x, 6, tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, 6, tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), 6, tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), 6, tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), 6, tabela_x(6,x6), tabela_w(6,w6)))
+    
     print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
 
 
