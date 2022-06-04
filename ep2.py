@@ -23,12 +23,12 @@ def tabela_w(n, L):                                         #cria a lista comple
         return np.concatenate((L, L))      #usa o fato de que a soma de todos os pesos é o tamanho do intervalo
     return np.concatenate((L, [2-2*(L.sum())], L))
 #
-def integra(a, b, c, d, f, n, r, w):    #na integral dupla calcula-se primeiro para cada ponto x fixo, a integral em y que corresponde a area A(x) determinada pela interseção do plano correspondente com o sólido. Após isso                   
+def integra(a, b, c, d, f, r, w):    #na integral dupla calcula-se primeiro para cada ponto x fixo, a integral em y que corresponde a area A(x) determinada pela interseção do plano correspondente com o sólido. Após isso                   
     I = 0
     for j in range(len(r)):                #laço que atualiza a integral dupla
         x_t = 1/2*((b-a)*r[j]+a+b)      #transformação de coordenadas para o intervalo de integração em x
         I_int = 0                       #aproximação para a integral interna, correspondente aos A(y) para x fixp
-        for i in range(0,n):
+        for i in range(len(r):
             I_int += w[i]*f(x_t,((d(x_t)-c(x_t))*r[i]+d(x_t)+c(x_t))/2)   # atualização de I_int a cada iteração, considerando os nós em y_i (e portanto função de x_i) correspondentes e já com a transformação de coordenadas correspondente
         I_int = I_int*w[j]*((d(x_t)-c(x_t))/2)                                 # multiplicação pelo fator de escala da integral interna
         I += I_int
@@ -46,10 +46,11 @@ if __name__ == "__main__":
     w10 = np.array([0.2955242247147528701738930, 0.2692667193099963550912269, 0.2190863625159820439955349, 0.1494513491505805931457763, 0.0666713443086881375935688])
 
     start_time = time.time()
-    print(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, 6, tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), 6, tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), 6, tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), 6, tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(6,x6), tabela_w(6,w6)))
+    print(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(6,x6), tabela_w(6,w6)))
     
     print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
 
