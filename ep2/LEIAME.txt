@@ -1,0 +1,10 @@
+# Exercicio programa 2 - MAP3121 - Metodos numéricos e aplicações 2022
+Programa feito com objetivo de resolver integrais e integrais duplas utilizando as Fórmulas de Integração de Gauss.
+
+# Dependencias
+- python 3.6 ou posterior
+- numpy 1.11 ou posterior
+  
+# Instruções de uso
+Para usar o exercicio programa 2, basta rodar o arquivo ep2.py com python3, seguindo as dependencias já colocadas.
+O código retornará valores de exemplo calculados pela função de integração montada.
