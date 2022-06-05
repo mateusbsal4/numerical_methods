@@ -28,7 +28,7 @@ def integra(a, b, c, d, f, r, w):    #na integral dupla calcula-se primeiro para
     for j in range(len(r)):                #laço que atualiza a integral dupla
         x_t = 1/2*((b-a)*r[j]+a+b)      #transformação de coordenadas para o intervalo de integração em x
         I_int = 0                       #aproximação para a integral interna, correspondente aos A(y) para x fixp
-        for i in range(len(r):
+        for i in range(len(r)):
             I_int += w[i]*f(x_t,((d(x_t)-c(x_t))*r[i]+d(x_t)+c(x_t))/2)   # atualização de I_int a cada iteração, considerando os nós em y_i (e portanto função de x_i) correspondentes e já com a transformação de coordenadas correspondente
         I_int = I_int*w[j]*((d(x_t)-c(x_t))/2)                                 # multiplicação pelo fator de escala da integral interna
         I += I_int
@@ -46,12 +46,26 @@ if __name__ == "__main__":
     w10 = np.array([0.2955242247147528701738930, 0.2692667193099963550912269, 0.2190863625159820439955349, 0.1494513491505805931457763, 0.0666713443086881375935688])
 
     start_time = time.time()
-    print(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(6,x6), tabela_w(6,w6)))
-    print(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(6,x6), tabela_w(6,w6)))
+    print("Respostas do primeiro exemplo:")
+    print("n=6:     " + str(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra(0,1, lambda x: 0, lambda x: 1, lambda x,y: 1, tabela_x(10,x10), tabela_w(10,w10))))
+    print("\nRespostas do segundo exemplo:")
+    print("n=6:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(10,x10), tabela_w(10,w10))))
+    print("\nRespostas do terceiro exemplo:")
+    print("n=6:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(10,x10), tabela_w(10,w10))))
+    print("\nRespostas do quarto exemplo:")
+    print("Volume da calota esferica")
+    print("n=6:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(10,x10), tabela_w(10,w10))))
+    print("Volume do solido de revolucao")
+    print("n=6:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(10,x10), tabela_w(10,w10))))
     
-    print("Tempo decorrido para gerar solucao: ", time.time() - start_time)
-
-
+    print("\nTempo decorrido para gerar as quatro solucoes: ", time.time() - start_time)
