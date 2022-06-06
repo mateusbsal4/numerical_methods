@@ -68,6 +68,7 @@ if __name__ == "__main__":
     print("n=6:     " + str(integra(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(6,x6), tabela_w(6,w6))))
     print("n=8:     " + str(integra(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(8,x8), tabela_w(8,w8))))
     print("n=10:    " + str(integra(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(10,x10), tabela_w(10,w10))))
+    print("Valor exato: " + str(0.179987079112))
     print("\nVolume do sólido de revolução obtido da rotação da região delimitada por x=0,x=e^{-y^2}, y=-1, y=1:")
     print("n=6:     " + str(integra(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(6,x6), tabela_w(6,w6))))
     print("n=8:     " + str(integra(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(8,x8), tabela_w(8,w8))))
