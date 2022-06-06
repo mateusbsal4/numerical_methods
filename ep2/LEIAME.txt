@@ -7,4 +7,4 @@ Programa feito com objetivo de resolver integrais e integrais duplas utilizando 
   
 # Instruções de uso
 Para usar o exercicio programa 2, basta rodar o arquivo ep2.py com python3, seguindo as dependencias já colocadas.
-O código retornará valores de exemplo calculados pela função de integração montada.
+O código retornará valores dos exemplo calculados pela função de integração montada com n=6, 8 e 10, bem como seus valores exatos (quando aplicavel) e o tempo gasto para calcular todos os resultados.
