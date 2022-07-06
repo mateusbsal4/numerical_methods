@@ -2,6 +2,9 @@ import numpy as np
 import math
 import time
 
+#Mateus Bonelli Salomão 11914789
+#Pedro Pimentel Fuoco 11804313
+
 def tabela_x(n, L):
     a = - L                                         #devolve o array completo das raizes xi, dado n e as raizes positivas
     if n % 2 == 0:
@@ -13,7 +16,7 @@ def tabela_w(n, L):                                         #cria a lista comple
         return np.concatenate((L, L))      #usa o fato de que a soma de todos os pesos é o tamanho do intervalo
     return np.concatenate((L, [2-2*(L.sum())], L))
 #
-def integra(a, b, c, d, f, r, w):    #na integral dupla calcula-se primeiro para cada ponto x fixo, a integral em y que corresponde a area A(x) determinada pela interseção do plano correspondente com o sólido. Após isso                   
+def integra_dupla(a, b, c, d, f, r, w):    #na integral dupla calcula-se primeiro para cada ponto x fixo, a integral em y que corresponde a area A(x) determinada pela interseção do plano correspondente com o sólido. Após isso                   
     I = 0
     for j in range(len(r)):                #laço que atualiza a integral dupla
         x_t = 1/2*((b-a)*r[j]+a+b)      #transformação de coordenadas para o intervalo de integração em x
@@ -25,6 +28,25 @@ def integra(a, b, c, d, f, r, w):    #na integral dupla calcula-se primeiro para
     I *= (b-a)/2                                                        # multipl. pelo fator de escala da integral externa
     return I    
 
+
+def integra(a,b,f,x,w):
+    assert len(x) == len(w) 
+    #assert type(a) == float and type(b) == float
+    I = 0
+    if a == -1 and b == 1:                             #acha integral para o caso [a,b]= [1,1]
+        for i in range(len(x)):
+            I += w[i]*avalia_funcao(f,(x[i]))
+        return I
+    for i in range(len(x)):
+        I += w[i]*avalia_funcao(f,((b-a)*x[i]+(b+a))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
+    I *= (b-a)/2
+    return I
+
+
+def avalia_funcao(f, y):
+    x = y
+    return eval(f)
+    
     
 if __name__ == "__main__":
     #dados do enunciado
@@ -37,40 +59,40 @@ if __name__ == "__main__":
 
     start_time = time.time()
     print("Volume do Cubo com arestas de comprimento 1:")
-    print("n=6:     " + str(integra(0,1, lambda y: 0, lambda y: 1, lambda y,x: 1, tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(0,1, lambda y: 0, lambda y: 1, lambda y,x: 1, tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(0,1, lambda y: 0, lambda y: 1, lambda y,x: 1, tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(0,1, lambda y: 0, lambda y: 1, lambda y,x: 1, tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(0,1, lambda y: 0, lambda y: 1, lambda y,x: 1, tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(0,1, lambda y: 0, lambda y: 1, lambda y,x: 1, tabela_x(10,x10), tabela_w(10,w10))))
     print("Valor exato: " + str(1))
     print("\nVolume do Tetraedro de vertices (0,0,0), (1,0,0), (0,1,0) e (0,0,1):")
-    print("n=6:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(0,1, lambda x: 0, lambda x: 1-x, (lambda x,y: 1-x-y), tabela_x(10,x10), tabela_w(10,w10))))
     print("Valor exato: " + str(1/6))
     print("\nArea A da região no primeiro quadrante limitada pelos eixos e pela curva y=1-x**2 (dydx):")
-    print("n=6:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(0,1, lambda x: 0, lambda x: 1-x**2, (lambda x,y: 1), tabela_x(10,x10), tabela_w(10,w10))))
     print("Valor exato: " + str(2/3))
     print("\nArea A da região no primeiro quadrante limitada pelos eixos e pela curva y=1-x**2 (dxdy):")
-    print("n=6:     " + str(integra(0,1, lambda y: 0, lambda y: math.sqrt(1-y), (lambda y,x: 1), tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(0,1, lambda y: 0, lambda y: math.sqrt(1-y), (lambda y,x: 1), tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(0,1, lambda y: 0, lambda y: math.sqrt(1-y), (lambda y,x: 1), tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(0,1, lambda y: 0, lambda y: math.sqrt(1-y), (lambda y,x: 1), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(0,1, lambda y: 0, lambda y: math.sqrt(1-y), (lambda y,x: 1), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(0,1, lambda y: 0, lambda y: math.sqrt(1-y), (lambda y,x: 1), tabela_x(10,x10), tabela_w(10,w10))))
     print("Valor exato: " + str(2/3))
     print("\nArea da superficie descrita por z=e^{y/x}, 0.1≤x≤0.5, x^3≤y≤x^2:")
-    print("n=6:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: math.sqrt(((y**2/x**4)*(math.e**(2*y/x))+(1/x**2)*(math.e**(2*y/x))+1)), tabela_x(10,x10), tabela_w(10,w10))))
     print("\nVolume embaixo da da superficie descrita por z=e^{y/x}, 0.1≤x≤0.5, x^3≤y≤x^2:")
-    print("n=6:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(0.1, 0.5, lambda x: x**3, lambda x: x**2, lambda x,y: (math.e)**(y/x), tabela_x(10,x10), tabela_w(10,w10))))
     print("\nVolume da calota esférica de altura 0.25 da esfera de raio 1:")
-    print("n=6:     " + str(integra(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(3/4, 1, lambda x: 0, lambda x: math.sqrt(1-x**2), lambda x,y: 2*math.pi*y, tabela_x(10,x10), tabela_w(10,w10))))
     print("Valor exato: " + str(0.179987079112))
     print("\nVolume do sólido de revolução obtido da rotação da região delimitada por x=0,x=e^{-y^2}, y=-1, y=1:")
-    print("n=6:     " + str(integra(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(6,x6), tabela_w(6,w6))))
-    print("n=8:     " + str(integra(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(8,x8), tabela_w(8,w8))))
-    print("n=10:    " + str(integra(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(10,x10), tabela_w(10,w10))))
+    print("n=6:     " + str(integra_dupla(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(6,x6), tabela_w(6,w6))))
+    print("n=8:     " + str(integra_dupla(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(8,x8), tabela_w(8,w8))))
+    print("n=10:    " + str(integra_dupla(-1, 1, lambda y: 0, lambda y: math.e**(-y**2), lambda y,x: 2*math.pi*x, tabela_x(10,x10), tabela_w(10,w10))))
     print("\nTempo decorrido para gerar as vinte e quatro solucoes: ", time.time() - start_time)

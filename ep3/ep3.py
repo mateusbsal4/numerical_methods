@@ -1,37 +1,31 @@
 import numpy as np
 import math
-#from ep2 import integra, avalia_funcao 
+import sys
+sys.path.insert(0,'../ep1')
+from ep1 import resolve_sistema_ciclico
+sys.path.insert(0,'../ep2')
+from ep2 import integra, avalia_funcao
+
+#Mateus Bonelli Salomão 11914789
+#Pedro Pimentel Fuoco 11804313
+
 
 def calcula_as(n, h, k, x, w):                #funcao que calcula a diagonal inferior
     a = []
+    a.append([0])
     for i in range(1,n):
         a_i = (-1/(h**2))*integra(i*h, ((i+1)*h), k, x, w) 
         a.append([a_i])
-    return np.array(a)
-
-
-
-
-def integra(a,b,f,x,w):
-    assert len(x) == len(w) 
-    #assert type(a) == float and type(b) == float
-    I = 0
-    if a == -1 and b == 1:                             #acha integral para o caso [a,b]= [1,1]
-        for i in range(len(x)):
-            I += w[i]*avalia_funcao(f,(x[i]))
-        return I
-    for i in range(len(x)):
-        I += w[i]*avalia_funcao(f,((b-a)*x[i]+(b+a))/2)            #para um intervalo generico faz a mudança y=(2x-a-b)/(b-a) calcula a integral com y em [1,1]
-    I *= (b-a)/2
-    return I
-
-def avalia_funcao(f, y):
-    x = y
-    return eval(f)
+    return np.array(a).T
 
 
 def calcula_cs(n, h, k,x, w):                #funcao que calcula a diagonal superiopr
-    return calcula_as(n, h, k, x, w)
+    c = []
+    for i in range(1,n):
+        c_i = (-1/(h**2))*integra(i*h, ((i+1)*h), k, x, w) 
+        c.append([c_i])
+    c.append([0])
+    return np.array(c).T
 
 
 def calcula_bs(n, h, k, x, w):                #calcula diagonal principal do sistema
@@ -39,7 +33,7 @@ def calcula_bs(n, h, k, x, w):                #calcula diagonal principal do sis
     for i in range(1,n+1):
         b_i = (1/(h**2))*(integra((i-1)*h, i*h, k, x, w)+integra(i*h, (i+1)*h, k, x, w))
         b.append([b_i])
-    return np.array(b)
+    return np.array(b).T
 
 
 def calcula_ds(n, h, f, x, w):              #calcula lado direito do sistema
@@ -47,29 +41,7 @@ def calcula_ds(n, h, f, x, w):              #calcula lado direito do sistema
     for i in range(1, n+1):
         d_i = (1/h)*(integra((i-1)*h, i*h, f + '*(x-' + str((i-1)*h) +')', x, w) + integra(i*h, (i+1)*h, str((i+1)*h) +'-x', x,w))      # construo a funcao de dentro concatenando os string e depois avalio com o avalia_vunao
         d.append([d_i])
-    return np.array(d)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return np.array(d).T
 
 
 def main():
@@ -84,10 +56,12 @@ def main():
     b= calcula_bs(n, h, k, x, w)
     c= calcula_cs(n, h, k, x, w)
     d  = calcula_ds(n, h, f, x, w)
-    print(a)
-    print(b)
-    print(c)
-    print(d)
-    
+    print("a: \n",a)
+    print("b: \n",b)
+    print("c: \n",c)
+    print("d: \n",d)
+    print("\nResolucao do sistema linear: \n", resolve_sistema_ciclico(a,b,c,d,n))
 
-if __name__=='__main__': main()
+
+if __name__=='__main__': 
+    main()
