@@ -15,11 +15,11 @@ def gerador_sistema_teste(n): #Essa funcao gera o sistema teste proposto no enun
     a[0][n-1] = (2*n - 1)/(2*n)
     
     b = np.ones((1,n)) * 2
-    
+
     c = 1 - a
 
     d = np.cos((2*math.pi*(np.multiply(i,i)))/(n**2))
-
+    
     return a,b,c,d
 
 def LU_decomp_tridiag(a,b,c): #Essa funcao recebe uma matriz tridiagonal em sua entrada, nas variaveis a,b e c, e retorna u e l, coeficientes das matrizes de decomposicao LU

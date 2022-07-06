@@ -2,7 +2,7 @@ import numpy as np
 import math
 import sys
 sys.path.insert(0,'../ep1')
-from ep1 import resolve_sistema_ciclico
+from ep1 import resolve_sistema_nao_ciclico, LU_decomp_tridiag
 sys.path.insert(0,'../ep2')
 from ep2 import integra, avalia_funcao
 
@@ -51,7 +51,8 @@ def main():
     # intervalo [0,1]
     h = 1/(n+1)
     k = '1'
-    f = '1'
+    f = '12*x*(1-x)-2'
+    u = '(x**2)*((1-x)**2)'
     a= calcula_as(n, h, k, x, w)
     b= calcula_bs(n, h, k, x, w)
     c= calcula_cs(n, h, k, x, w)
@@ -60,7 +61,8 @@ def main():
     print("b: \n",b)
     print("c: \n",c)
     print("d: \n",d)
-    print("\nResolucao do sistema linear: \n", resolve_sistema_ciclico(a,b,c,d,n))
+    u,l = LU_decomp_tridiag(a,b,c)
+    print("\nResolucao do sistema linear: \n", resolve_sistema_nao_ciclico(u,l,c,d))
 
 
 if __name__=='__main__': 
