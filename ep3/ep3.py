@@ -59,9 +59,6 @@ def calcula_alphas(n, h,f, k, x, w):
 def calcula_erros(alphas, u, h, n):
     erros = []
     for i in range(0, n):
-        #print(alphas[i])
-        #print((i+1)*h)
-        #print(avalia_funcao(u,(i+1)*h))
         erro_xi = abs(alphas[0][i]-avalia_funcao(u, (i+1)*h))
         erros.append(erro_xi)
     return np.array(erros)
@@ -91,6 +88,20 @@ def resolve_alphas(n, h,f, k, x, w):
 def calcula_erro_max(erros):
     return np.amax(erros)
 
+def funcao_aprox_splines(alphas, x):
+    n = len(alphas[0])
+    h = 1/(n+1)
+    x_i = np.resize(np.arange(0,n+2)*h,(1,n+2))
+    value = 0
+    for i in range(1, len(x_i[0])-1):
+        phi = 0
+        if x >= x_i[0][i-1] and x <= x_i[0][i]:
+            phi = (1/h)*(x-x_i[0][i-1])
+        elif  x > x_i[0][i] and x < x_i[0][i+1]:
+            phi = (1/h)*(x_i[0][i+1]-x)
+        value += alphas[0][i-1]*phi
+    return value
+
 def main():
     x1 = np.array([-math.sqrt(1/3), math.sqrt(1/3)])          #nos e pesos para a formula de Gauss com 2 pontos
     w1 = np.array([1, 1])
@@ -112,5 +123,11 @@ def main():
     print("\nerros1 nos x_i: \n",erros1)
     print("\nerro1 maximo: \n",erro_max1)
 
+    erros = []
+    for i in range(0,1000):
+        i = i/1000
+        erros.append(abs(avalia_funcao(u, i) - funcao_aprox_splines(alphas1, i)))
+    print(calcula_erro_max(erros))
+    
 if __name__=='__main__': 
     main()
