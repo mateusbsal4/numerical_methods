@@ -10,3 +10,6 @@ Programa feito com objetivo de fazer uma simulação numérica do aquecimento e 
 Para usar o exercicio programa 3, basta rodar o arquivo ep3_numerico.py com python3, seguindo as dependencias já colocadas.
 O código anunciará qual teste está sendo feito no terminal e pedirá inputs para o usuário, que deve colocar os valores pedidos de acordo com o que deseja.
 Uma vez feito isso, gráficos aparecerão na tela do usuário, depois de analisa-los, basta fechar o gráfico para continuar a execução do programa.
+
+# O notebook
+Um jupyter notebook está sendo enviado junto para facilitar a correção, o arquivo .py funciona independentemente mas pensamos que talvez seja útil para visualizar as coisas.
